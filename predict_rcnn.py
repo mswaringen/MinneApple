@@ -68,6 +68,8 @@ def main(args):
     checkpoint = torch.load(args.weight_file, map_location=device)
     model.load_state_dict(checkpoint['model'], strict=False)
     model.eval()
+    # Move to GPU
+    model.to(device)
 
     print("Creating data loaders")
     dataset_test = AppleDataset(args.data_path, get_transform(train=False))
@@ -89,8 +91,8 @@ def main(args):
             img_id = targets[ii]['image_id']
             img_name = data_loader_test.dataset.get_img_name(img_id)
             print("Predicting on image: {}".format(img_name))
-            boxes = output['boxes'].detach().numpy()
-            scores = output['scores'].detach().numpy()
+            boxes = output['boxes'].cpu().detach().numpy()
+            scores = output['scores'].cpu().detach().numpy()
 
             im_names = np.repeat(img_name, len(boxes), axis=0)
             stacked = np.hstack((im_names.reshape(len(scores), 1), boxes.astype(int), scores.reshape(len(scores), 1)))

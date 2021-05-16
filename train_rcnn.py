@@ -64,7 +64,7 @@ def main(args):
     print("Loading data")
     num_classes = 2
     dataset = AppleDataset(os.path.join(args.data_path, 'train'), get_transform(train=True))
-    dataset_test = AppleDataset(os.path.join(args.data_path, 'test'), get_transform(train=False))
+    dataset_test = AppleDataset(os.path.join(args.data_path, 'validation'), get_transform(train=False))
 
     print("Creating data loaders")
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=True,
